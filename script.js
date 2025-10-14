@@ -1,24 +1,37 @@
-class SplashScreen {
-    constructor(element, duration = 4000) {
-        this.element = element;
-        this.duration = duration;
+class NebulaField {
+    constructor(container, count = 8) {
+        this.container = container;
+        this.count = count;
+        this.nebulas = [];
+        this.colors = [
+            'rgba(106, 50, 232, 0.8)',
+            'rgba(50, 80, 232, 0.7)',
+            'rgba(150, 50, 200, 0.6)'
+        ];
     }
 
-    hide() {
-        return new Promise(resolve => {
-            this.element.classList.add('is-hidden');
-            this.element.addEventListener('transitionend', () => {
-                this.element.style.display = 'none';
-                resolve();
-            }, { once: true });
-        });
+    create() {
+        for (let i = 0; i < this.count; i++) {
+            const nebula = document.createElement('div');
+            nebula.classList.add('nebula');
+            
+            const size = Math.random() * 500 + 300;
+            nebula.style.width = `${size}px`;
+            nebula.style.height = `${size}px`;
+            nebula.style.top = `${Math.random() * 100 - 25}%`;
+            nebula.style.left = `${Math.random() * 100 - 25}%`;
+            nebula.style.background = this.colors[i % this.colors.length];
+            
+            this.container.appendChild(nebula);
+            this.nebulas.push(nebula);
+        }
     }
 
-    init() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                this.hide().then(resolve);
-            }, this.duration);
+    startAnimation() {
+        this.nebulas.forEach(nebula => {
+            nebula.style.animationDuration = `${Math.random() * 15 + 15}s`;
+            nebula.style.animationDelay = `${Math.random() * 15}s`;
+            nebula.classList.add('is-pulsing');
         });
     }
 }
@@ -33,21 +46,14 @@ class Accordion {
         this.items.forEach(item => {
             const summary = item.querySelector('summary');
             const content = item.querySelector('.accordion-item__content');
-
             summary.addEventListener('click', (event) => {
                 event.preventDefault();
-                
                 if (item.open) {
-                    const closingAnimation = content.animate({ maxHeight: 0 }, { duration: 400, easing: 'ease-out' });
-                    closingAnimation.onfinish = () => {
-                        item.removeAttribute('open');
-                    };
+                    const anim = content.animate({ maxHeight: 0 }, { duration: 300, easing: 'ease-out' });
+                    anim.onfinish = () => item.removeAttribute('open');
                 } else {
                     item.setAttribute('open', '');
-                    const openingAnimation = content.animate({ maxHeight: [0, `${content.scrollHeight}px`] }, { duration: 400, easing: 'ease-out' });
-                    openingAnimation.onfinish = () => {
-                         content.style.maxHeight = 'none';
-                    };
+                    content.animate({ maxHeight: [`0px`, `${content.scrollHeight}px`] }, { duration: 300, easing: 'ease-out' });
                 }
             });
         });
@@ -56,24 +62,27 @@ class Accordion {
 
 class App {
     constructor() {
-        this.splashScreenElement = document.querySelector('[data-splash-screen]');
-        this.mainContentElement = document.querySelector('[data-main-content]');
-        this.accordionContainerElement = document.querySelector('[data-accordion-container]');
-    }
-
-    showMainContent() {
-        this.mainContentElement.classList.add('is-visible');
+        this.accordionContainer = document.querySelector('[data-accordion-container]');
+        this.backgroundContainer = document.querySelector('[data-background-container]');
+        this.header = document.querySelector('[data-header]');
+        this.mainContent = document.querySelector('[data-main-content]');
     }
 
     init() {
-        const splash = new SplashScreen(this.splashScreenElement, 3000);
-        const accordion = new Accordion(this.accordionContainerElement);
-        
-        accordion.init();
-        
-        splash.init().then(() => {
-            this.showMainContent();
-        });
+        if (this.accordionContainer) {
+            new Accordion(this.accordionContainer).init();
+        }
+
+        if (this.backgroundContainer) {
+            const nebulaField = new NebulaField(this.backgroundContainer);
+            nebulaField.create();
+
+            // Wait for UI animations to finish before starting background animations
+            const uiAnimationDuration = 2000; // Corresponds to header/panel animation time
+            setTimeout(() => {
+                nebulaField.startAnimation();
+            }, uiAnimationDuration);
+        }
     }
 }
 
