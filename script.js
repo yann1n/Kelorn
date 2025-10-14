@@ -39,21 +39,66 @@ class NebulaField {
 class Accordion {
     constructor(container) {
         this.container = container;
-        this.items = container.querySelectorAll('details');
+        this.items = Array.from(container.querySelectorAll('.accordion-item'));
+        this.activeItem = null;
+    }
+
+    async animate(element, keyframes, options) {
+        const anim = element.animate(keyframes, { ...options, fill: 'forwards' });
+        await anim.finished;
+        return anim;
+    }
+
+    async open(item) {
+        if (this.activeItem) await this.close(this.activeItem);
+        
+        this.activeItem = item;
+        item.classList.add('is-open');
+        
+        const content = item.querySelector('.accordion-item__content');
+        const innerContent = item.querySelector('.accordion-item__content-inner');
+        
+        await this.animate(
+            content,
+            { maxHeight: [`0px`, `${innerContent.scrollHeight}px`] },
+            { duration: 400, easing: 'ease-out' }
+        );
+        
+        await this.animate(
+            innerContent,
+            { opacity: [0, 1], transform: ['translateY(-15px)', 'translateY(0)'] },
+            { duration: 300, easing: 'ease-out' }
+        );
+    }
+
+    async close(item) {
+        this.activeItem = null;
+        item.classList.remove('is-open');
+
+        const content = item.querySelector('.accordion-item__content');
+        const innerContent = item.querySelector('.accordion-item__content-inner');
+
+        await this.animate(
+            innerContent,
+            { opacity: [1, 0], transform: ['translateY(0)', 'translateY(-15px)'] },
+            { duration: 200, easing: 'ease-in' }
+        );
+        
+        await this.animate(
+            content,
+            { maxHeight: [`${innerContent.scrollHeight}px`, '0px'] },
+            { duration: 300, easing: 'ease-in-out' }
+        );
     }
 
     init() {
         this.items.forEach(item => {
-            const summary = item.querySelector('summary');
-            const content = item.querySelector('.accordion-item__content');
-            summary.addEventListener('click', (event) => {
-                event.preventDefault();
-                if (item.open) {
-                    const anim = content.animate({ maxHeight: 0 }, { duration: 300, easing: 'ease-out' });
-                    anim.onfinish = () => item.removeAttribute('open');
+            const header = item.querySelector('.accordion-item__header');
+            header.addEventListener('click', () => {
+                if (this.activeItem === item) {
+                    this.close(item);
                 } else {
-                    item.setAttribute('open', '');
-                    content.animate({ maxHeight: [`0px`, `${content.scrollHeight}px`] }, { duration: 300, easing: 'ease-out' });
+                    this.open(item);
                 }
             });
         });
@@ -64,8 +109,6 @@ class App {
     constructor() {
         this.accordionContainer = document.querySelector('[data-accordion-container]');
         this.backgroundContainer = document.querySelector('[data-background-container]');
-        this.header = document.querySelector('[data-header]');
-        this.mainContent = document.querySelector('[data-main-content]');
     }
 
     init() {
@@ -77,8 +120,7 @@ class App {
             const nebulaField = new NebulaField(this.backgroundContainer);
             nebulaField.create();
 
-            // Wait for UI animations to finish before starting background animations
-            const uiAnimationDuration = 2000; // Corresponds to header/panel animation time
+            const uiAnimationDuration = 2000;
             setTimeout(() => {
                 nebulaField.startAnimation();
             }, uiAnimationDuration);

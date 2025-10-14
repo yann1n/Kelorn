@@ -86,12 +86,12 @@ body {
     height: auto;
     animation: 
         fadeInAndScale var(--animation-duration) ease-out forwards,
-        leaf-levitate 8s ease-in-out var(--animation-duration) infinite; /* ИЗМЕНЕНО */
+        leaf-levitate 8s ease-in-out var(--animation-duration) infinite;
     transition: transform 0.4s ease-out, filter 0.4s ease-out;
 }
 
 .page-header__banner:hover {
-    animation-play-state: paused; /* Приостанавливаем левитацию при наведении */
+    animation-play-state: paused;
     transform: rotateX(5deg) rotateY(-10deg) scale(1.2);
     filter: drop-shadow(10px 25px 15px rgba(0, 0, 0, 0.6));
 }
@@ -105,7 +105,6 @@ body {
     to { opacity: 1; transform: scale(1); }
 }
 
-/* НОВАЯ АНИМАЦИЯ ЛЕВИТАЦИИ */
 @keyframes leaf-levitate {
     0%, 100% {
         transform: rotateX(5deg) rotateY(-10deg) translateY(0);
@@ -134,7 +133,7 @@ body {
     animation: fadeIn var(--animation-duration) ease-out 0.8s forwards;
 }
 
-.content-panel {
+.content-panel, .profile-panel {
     max-width: 900px;
     margin: 2rem auto;
     background: var(--glass-background);
@@ -146,6 +145,58 @@ body {
     padding: 2rem;
 }
 
+/* --- ИЗМЕНЕННЫЕ СТИЛИ ДЛЯ ПАНЕЛИ ПРОФИЛЯ --- */
+.profile-panel {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+}
+
+.profile-panel__avatar-container {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0; 
+    border-radius: 50%;
+    border: 2px solid var(--glass-border);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-panel__avatar {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 70%; 
+    transform: scale(0.92); 
+    border-radius: 50%;
+}
+
+.profile-panel__details {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.profile-panel__details strong {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.profile-panel__details .separator {
+    font-size: 1.5em; /* Делаем точку крупнее */
+    line-height: 1; /* Улучшаем вертикальное выравнивание */
+    color: var(--color-text-secondary);
+}
+
+.profile-panel__details span {
+    color: var(--color-text-secondary);
+}
+
+/* --- СТИЛИ ДЛЯ АККОРДЕОНА --- */
 .accordion-item { 
     border-bottom: 1px solid var(--glass-border);
 }
@@ -179,18 +230,17 @@ body {
     transition: transform 0.3s ease-out;
 }
 
-details[open] > summary .accordion-item__arrow { transform: rotate(225deg); }
-
-.accordion-item__content {
-    padding: 0 1rem;
-    color: var(--color-text-secondary);
+.accordion-item.is-open .accordion-item__arrow { 
+    transform: rotate(225deg);
 }
 
-.accordion-item__content p, .accordion-item__content ul { padding-bottom: 1.5rem; }
-.accordion-item__content ul { list-style-position: inside; padding-left: 1rem; }
-.accordion-item__content h3 {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-text-primary);
-    font-size: 1.1em;
+.accordion-item__content {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.accordion-item__content-inner {
+    opacity: 0;
+    transform: translateY(-15px);
+    padding: 0.5rem 1rem 0 1rem;
 }
