@@ -1,0 +1,183 @@
+:root {
+    --color-background: #000;
+    --color-text-primary: #E0E0E0;
+    --color-text-secondary: #c0c0c0;
+    --color-primary: #4A00E0;
+    --color-primary-glow: #A020F0;
+    --font-pixel: 'Press Start 2P', cursive;
+    --animation-duration: 1.5s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-pixel);
+    overflow-x: hidden;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.pixel-space-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: 
+        url('https://www.transparenttextures.com/patterns/stardust.png'),
+        url('https://i.imgur.com/S25zG5s.png');
+    animation: move-space 120s linear infinite;
+}
+
+@keyframes move-space {
+    from { background-position: 0 0; }
+    to { background-position: 1000px 1000px; }
+}
+
+.splash-screen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+.splash-screen.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-screen__title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    text-shadow: 0 0 10px var(--color-primary-glow), 0 0 20px var(--color-primary-glow);
+}
+
+.splash-screen__title, .splash-screen__banner {
+    opacity: 0;
+}
+
+.splash-screen__title--left {
+    animation: fadeInFromLeft var(--animation-duration) ease-out 1s forwards;
+}
+
+.splash-screen__title--right {
+    animation: fadeInFromRight var(--animation-duration) ease-out 1s forwards;
+}
+
+.splash-screen__banner {
+    width: 150px;
+    height: auto;
+    animation: fadeInAndScale var(--animation-duration) ease-out forwards;
+}
+
+@keyframes fadeInAndScale {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeInFromLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInFromRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.main-content {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease-in;
+    padding: 2rem;
+}
+
+.main-content.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-panel {
+    max-width: 900px;
+    margin: 5vh auto;
+    background-color: rgba(10, 5, 20, 0.7);
+    border: 2px solid var(--color-primary);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 0 30px rgba(74, 0, 224, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.accordion-item {
+    border-bottom: 2px solid var(--color-primary);
+}
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+.accordion-item__header {
+    padding: 1.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    list-style: none;
+}
+.accordion-item__header::-webkit-details-marker {
+    display: none;
+}
+
+.accordion-item__header:hover {
+    background-color: rgba(74, 0, 224, 0.2);
+}
+
+.accordion-item__header h2 {
+    font-size: 1em;
+    color: var(--color-text-primary);
+}
+
+.accordion-item__arrow {
+    width: 10px;
+    height: 10px;
+    border-right: 3px solid var(--color-text-primary);
+    border-bottom: 3px solid var(--color-text-primary);
+    transform: rotate(45deg);
+    transition: transform 0.3s ease-out;
+}
+
+details[open] > summary .accordion-item__arrow {
+    transform: rotate(225deg);
+}
+
+.accordion-item__content {
+    padding: 0 1rem;
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+}
+
+.accordion-item__content p, .accordion-item__content ul {
+    padding-bottom: 1.5rem;
+}
+
+.accordion-item__content ul {
+    list-style-position: inside;
+    padding-left: 1rem;
+}
+
+.accordion-item__content h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    font-size: 0.95em;
+}
