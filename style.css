@@ -21,6 +21,20 @@ body {
     font-size: 16px;
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 .background-container {
     position: fixed;
     top: 0;
@@ -133,7 +147,7 @@ body {
     animation: fadeIn var(--animation-duration) ease-out 0.8s forwards;
 }
 
-.content-panel, .profile-panel {
+.content-panel, .profile-panel, .map-panel {
     max-width: 900px;
     margin: 2rem auto;
     background: var(--glass-background);
@@ -145,7 +159,6 @@ body {
     padding: 2rem;
 }
 
-/* --- ИЗМЕНЕННЫЕ СТИЛИ ДЛЯ ПАНЕЛИ ПРОФИЛЯ --- */
 .profile-panel {
     display: flex;
     align-items: center;
@@ -156,7 +169,7 @@ body {
 .profile-panel__avatar-container {
     width: 80px;
     height: 80px;
-    flex-shrink: 0; 
+    flex-shrink: 0;
     border-radius: 50%;
     border: 2px solid var(--glass-border);
     overflow: hidden;
@@ -166,11 +179,11 @@ body {
 }
 
 .profile-panel__avatar {
-    width: 100%; 
+    width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 50% 70%; 
-    transform: scale(0.92); 
+    object-position: 50% 70%;
+    transform: scale(0.9);
     border-radius: 50%;
 }
 
@@ -187,8 +200,8 @@ body {
 }
 
 .profile-panel__details .separator {
-    font-size: 1.5em; /* Делаем точку крупнее */
-    line-height: 1; /* Улучшаем вертикальное выравнивание */
+    font-size: 1.5em;
+    line-height: 1;
     color: var(--color-text-secondary);
 }
 
@@ -196,7 +209,28 @@ body {
     color: var(--color-text-secondary);
 }
 
-/* --- СТИЛИ ДЛЯ АККОРДЕОНА --- */
+.map-panel h2 {
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 75%, transparent 100%);
+    mask-image: radial-gradient(ellipse at center, black 75%, transparent 100%);
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 .accordion-item { 
     border-bottom: 1px solid var(--glass-border);
 }
