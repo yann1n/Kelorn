@@ -244,10 +244,25 @@ body {
     align-items: center;
     transition: background-color 0.3s ease;
     list-style: none;
+    border-radius: 8px; /* Для подсветки */
 }
 .accordion-item__header::-webkit-details-marker { display: none; }
 
 .accordion-item__header:hover { background-color: rgba(255, 255, 255, 0.05); }
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ ПОДСВЕТКИ --- */
+[data-highlight] > .accordion-item__header {
+    animation: pulse-highlight 3s ease-in-out infinite;
+}
+
+@keyframes pulse-highlight {
+    0%, 100% {
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.1);
+    }
+}
 
 .accordion-item__header h2 {
     font-size: 1.2em;
@@ -277,4 +292,73 @@ body {
     opacity: 0;
     transform: translateY(-15px);
     padding: 0.5rem 1rem 0 1rem;
+}
+
+.styles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.grid-item {
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    transition: transform 0.3s ease-out;
+}
+
+.grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ ПАНЕЛИ DISCORD --- */
+.discord-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1.25rem 2rem;
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    transition: all 0.3s ease-out;
+}
+
+.discord-panel:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+}
+
+.discord-panel__icon {
+    width: 32px;
+    height: 32px;
+    fill: var(--color-text-primary); /* Устанавливаем цвет иконки */
+    opacity: 0.8; /* Делаем ее немного прозрачной */
+    transition: opacity 0.3s ease-out;
+}
+
+.discord-panel:hover .discord-panel__icon {
+    opacity: 1; /* При наведении иконка становится полностью видимой */
+}
+
+.discord-panel__text {
+    font-size: 1.1em;
+    font-weight: 700;
 }

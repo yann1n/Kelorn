@@ -36,6 +36,30 @@ class NebulaField {
     }
 }
 
+class ImageGrid {
+    constructor(container, imageUrls) {
+        this.container = container;
+        this.imageUrls = imageUrls;
+    }
+
+    render() {
+        if (!this.container) return;
+        
+        this.imageUrls.forEach(url => {
+            const gridItem = document.createElement('div');
+            gridItem.className = 'grid-item';
+
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Пример стилистики построек';
+            img.loading = 'lazy';
+
+            gridItem.appendChild(img);
+            this.container.appendChild(gridItem);
+        });
+    }
+}
+
 class Accordion {
     constructor(container) {
         this.container = container;
@@ -109,6 +133,7 @@ class App {
     constructor() {
         this.accordionContainer = document.querySelector('[data-accordion-container]');
         this.backgroundContainer = document.querySelector('[data-background-container]');
+        this.stylesGridContainer = document.querySelector('[data-styles-grid]');
     }
 
     init() {
@@ -124,6 +149,27 @@ class App {
             setTimeout(() => {
                 nebulaField.startAnimation();
             }, uiAnimationDuration);
+        }
+
+        if (this.stylesGridContainer) {
+            // ИЗМЕНЕНО: Обновленный список изображений
+            const imageUrls = [
+                'https://i.pinimg.com/236x/fa/9b/91/fa9b91072944068028255653e0a2c78f.jpg',
+                'https://i.pinimg.com/236x/4e/26/36/4e26369a13bbf2e21e853ae8a37a44e4.jpg',
+                'https://i.pinimg.com/236x/d2/c3/80/d2c380b211722cf2b296eaa40cc59fd7.jpg',
+                'https://i.pinimg.com/236x/9b/da/fe/9bdafea8367b9b61ecb8f5c961f6403a.jpg',
+                'https://i.pinimg.com/736x/5d/37/68/5d376801686fdb973985678389383995.jpg',
+                'https://i.pinimg.com/736x/82/93/42/829342c59836ce32cff2fd88a96f2a91.jpg',
+                'https://i.pinimg.com/1200x/f9/90/91/f9909195a9d5d4b2d3785fbb8f60c2ab.jpg',
+                'https://i.pinimg.com/736x/31/31/8c/31318ca85f86acc167e48bf90dbbcc1f.jpg',
+                'https://i.pinimg.com/736x/f4/24/c2/f424c2b85d1a7a5eaf0bfdf77003b03f.jpg',
+                'https://i.pinimg.com/1200x/75/ca/6c/75ca6c2fd1247510ec2382ca6193078b.jpg',
+                'https://i.pinimg.com/736x/7d/7e/2c/7d7e2ca691f4ddef80a4ea713420c466.jpg',
+                'https://i.pinimg.com/736x/8b/bb/f2/8bbbf27b63cc2e75e30c10091870bb32.jpg',
+                'https://i.pinimg.com/736x/49/3c/eb/493ceb9c5d328a69fc76efa6995d25e9.jpg',
+                'https://i.pinimg.com/736x/04/2a/32/042a32fbefa15650d6b4feff362efd22.jpg'
+            ];
+            new ImageGrid(this.stylesGridContainer, imageUrls).render();
         }
     }
 }
